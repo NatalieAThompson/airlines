@@ -4,6 +4,7 @@ import data from './data'
 
 import AirRoutes from './components/AirRoutes';
 import Footer from './components/Footer';
+import Select from './components/Select';
 
 const PerPage = 25
 
@@ -11,6 +12,8 @@ const App = () => {
   const [allColumns, setAllColumns] = useState([])
   const [currentEle, setCurrentEle] = useState(1)
   const [columns, setColumns] = useState([])
+  const [airlines, setAirlines] = useState([])
+  const [airports, setAirports] = useState([])
 
   useEffect(() => {
     function createAirlinesHash() {
@@ -30,9 +33,11 @@ const App = () => {
       return airports
     }
 
-    const airlines = createAirlinesHash();
-    const airports = createAirportHash();
+    setAirlines(createAirlinesHash());
+    setAirports(createAirportHash());
+  }, [])
 
+  useEffect(() => {
     function createColumns() {
       const columns = [];
 
@@ -48,7 +53,7 @@ const App = () => {
     }
 
     setAllColumns(createColumns())
-  }, [])
+  }, [airlines, airports])
 
   useEffect(() => {
     document.querySelector(".totalNumber").innerText = allColumns.length
@@ -68,15 +73,17 @@ const App = () => {
   }, [allColumns, currentEle])
 
   return (
-  <div className="app">
-  <header className="header">
-    <h1 className="title">Airline Routes</h1>
-  </header>
-  <section>
-    <AirRoutes className="routes-table" columns={columns} />
-    <Footer perPage={PerPage} current={currentEle} setCurrent={setCurrentEle} />
-  </section>
-</div>
-)}
+    <div className="app">
+      <header className="header">
+        <h1 className="title">Airline Routes</h1>
+      </header>
+      <section>
+        <Select airports={airports} airlines={airlines}/>
+        <AirRoutes className="routes-table" columns={columns} />
+        <Footer perPage={PerPage} current={currentEle} setCurrent={setCurrentEle} />
+      </section>
+    </div>
+  )
+}
 
 export default App;

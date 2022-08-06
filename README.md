@@ -1,6 +1,6 @@
 ### About
 
-This project is a React application which will display information abut a collection of routes flown by several large airlines.
+The purpose of this project is to practice using React by displaying a collection of data related to airline routes in an understandable and interactive way. The starting point for the project was taken from: https://github.com/launchschool/airlines_boilerplate.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
