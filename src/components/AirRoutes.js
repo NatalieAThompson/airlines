@@ -1,7 +1,6 @@
 import React from 'react'
 
 const AirRoutes = ({ columns, className }) => {
-  console.log(columns)
   return (
     <table className={className}>
       <thead>

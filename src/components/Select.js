@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
+import Options from "./Options";
 
-const Select = ({ airports, airlines }) => {
-  const [airline, setAirline] = useState('All Airlines')
-  const [airport, setAirport] = useState('All Airports')
-
-  const select = (event, setter) => {
-    console.log(event.target.value)
-    setter(event.target.value)
-  }
+const Select = ({ airports, airlines, selected, setters, filters }) => {
+  const [ airport, airline ] = selected;
 
   useEffect(() => {
     if (airline === 'All Airlines' && airport === 'All Airports') {
@@ -15,24 +10,38 @@ const Select = ({ airports, airlines }) => {
     } else {
       document.querySelector('.showRoutes').disabled = false
     }
-  }, [airline, airport])
+
+    const filteredAirlines = filters[0]()
+    const filteredAirports = filters[1]()
+    const [airlineNode, airportsNode] = document.querySelectorAll('select')
+    airlineNode.childNodes.forEach( (option, i) => {
+      if (filteredAirlines.includes(option.value) || filteredAirlines.length === 0 || i === 0) {
+        option.disabled = false
+      } else {
+        option.disabled = true
+      }
+    });
+
+    airportsNode.childNodes.forEach( (option, i) => {
+      if (filteredAirports.includes(option.value) || filteredAirports.length === 0 || i === 0) {
+        option.disabled = false
+      } else {
+        option.disabled = true
+      }
+    });
+
+
+    console.log(airportsNode)
+  }, [airline, airport, filters])
+
+
 
   return (
     <p>
       Show routes on
-      <select id="airlines" onChange={(event) => select(event, setAirline)}>
-        <option>All Airlines</option>
-        {Object.keys(airlines).map( key => (
-          <option key={key}>{airlines[key]}</option>
-        ))}
-      </select>
+      <Options id="airlines" setter={setters[1]} defaultOption="All Airlines" options={airlines} currentOption={airline} />
       flying in or out of
-      <select id="airports" onChange={(event) => select(event, setAirport)}>
-        <option>All Airports</option>
-        {Object.keys(airports).map( key => (
-          <option key={key}>{airports[key]}</option>
-        ))}
-      </select>
+      <Options id="airports" setter={setters[0]} defaultOption="All Airports" options={airports} currentOption={airport} />
       <button className="showRoutes">Show All Routes</button>
     </p>
   )
